@@ -1,0 +1,47 @@
+---
+title: "FA#6"
+output: html_document
+date: "2023-11-09"
+---
+## Data:
+
+```{r}
+data <- read.csv(file="Invisibility Cloak.csv", header=TRUE, sep=",")
+data
+```
+
+## Code:
+
+```{r cars}
+# Load the data
+invisibility_cloak_data <- read.csv("Invisibility Cloak.csv")
+
+# Convert 'Cloak' to a factor if it's not already
+invisibility_cloak_data$Cloak <- as.factor(invisibility_cloak_data$Cloak)
+
+# Assumption checks
+# Use boxplot to visually inspect for outliers
+boxplot(invisibility_cloak_data$Mischief ~ invisibility_cloak_data$Cloak)
+
+# Test for normality
+shapiro.test(invisibility_cloak_data$Mischief[invisibility_cloak_data$Cloak == "0"])
+shapiro.test(invisibility_cloak_data$Mischief[invisibility_cloak_data$Cloak == "1"])
+
+# Test for homogeneity of variances
+# Assuming you have installed and loaded the 'car' package for leveneTest
+library(car)
+leveneTest(Mischief ~ Cloak, data = invisibility_cloak_data)
+
+# Independent samples t-test
+t_test_results <- t.test(Mischief ~ Cloak, data = invisibility_cloak_data, var.equal = TRUE)
+
+# Output the results
+t_test_results
+
+```
+\n
+## Report:
+An independent samples t-test was performed revealing a t-statistic of -1.713 with 22 degrees of freedom. The p-value was 0.101, which is above the conventional alpha level of 0.05. The mean difference was -1.250 with a standard error of 0.730, and the 95% confidence interval of the mean difference ranged from -2.763 to 0.263.\n
+
+## Conclusion:
+The analysis did not find a statistically significant difference in the number of mischievous acts committed by those with and without an invisibility cloak (p > 0.05). Therefore, we fail to reject the null hypothesis, suggesting that the invisibility cloak does not have a measurable effect on the frequency of mischievous behavior among the participants. It is important to consider potential limitations, such as the size and representativeness of the sample, in the interpretation of these results.
